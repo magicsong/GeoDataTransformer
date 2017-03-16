@@ -1,0 +1,6 @@
+SHP~ESRI Shapefile
+JPG~JPEG
+TIF~GTiff
+TIFF~GTiff
+IMG~HFA
+GDB~FileGDB

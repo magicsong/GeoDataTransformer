@@ -1,0 +1,5 @@
+AUTOMAKE_OPTIONS=foreign  
+INCLUDES= -I/usr/local/include  
+bin_PROGRAMS=CoordinateTransformer  
+GDALTest_SOURCES=CoordinateTransformer+.cpp   
+GDALTest_LDADD=-lgdal

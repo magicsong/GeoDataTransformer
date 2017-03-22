@@ -102,7 +102,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_CoordinateTransformer_OBJECTS = CoordinateTransformer+.$(OBJEXT)
+am_CoordinateTransformer_OBJECTS = CoordinateTransformer+.$(OBJEXT) \
+	_Matrix.$(OBJEXT) CoordinateBuilder.$(OBJEXT) \
+	DataTransformerBase.$(OBJEXT) PointTransformer.$(OBJEXT) \
+	RasterDataTransformer.$(OBJEXT) stdafx.$(OBJEXT) \
+	UsefulKit.$(OBJEXT) VectorDataTransformer.$(OBJEXT)
 CoordinateTransformer_OBJECTS = $(am_CoordinateTransformer_OBJECTS)
 CoordinateTransformer_DEPENDENCIES =
 AM_V_P = $(am__v_P_@AM_V@)
@@ -134,6 +138,18 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
+am__v_CC_0 = @echo "  CC      " $@;
+am__v_CC_1 = 
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+am__v_CCLD_0 = @echo "  CCLD    " $@;
+am__v_CCLD_1 = 
 SOURCES = $(CoordinateTransformer_SOURCES)
 DIST_SOURCES = $(CoordinateTransformer_SOURCES)
 am__can_run_installinfo = \
@@ -276,7 +292,13 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign  
 INCLUDES = -I/usr/local/include  
-CoordinateTransformer_SOURCES = CoordinateTransformer+.cpp   
+CoordinateTransformer_SOURCES = CoordinateTransformer+.cpp _Matrix.h _Matrix.cpp CoordinateBuilder.h CoordinateBuilder.cpp \
+DataTransformerBase.h DataTransformerBase.cpp PointTransformer.h PointTransformer.cpp \
+RasterDataTransformer.h RasterDataTransformer.cpp \
+stdafx.h stdafx.cpp \
+UsefulKit.h UsefulKit.cpp \
+VectorDataTransformer.h VectorDataTransformer.cpp   
+
 CoordinateTransformer_LDADD = -lgdal
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -384,7 +406,15 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoordinateBuilder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoordinateTransformer+.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DataTransformerBase.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PointTransformer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RasterDataTransformer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UsefulKit.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VectorDataTransformer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/_Matrix.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stdafx.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

@@ -1,6 +1,6 @@
-CoordinateTransformer+.o: CoordinateTransformer+.cpp \
- /usr/include/stdc-predef.h stdafx.h /usr/include/stdio.h \
- /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+UsefulKit.o: UsefulKit.cpp /usr/include/stdc-predef.h stdafx.h \
+ /usr/include/stdio.h /usr/include/features.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
@@ -218,9 +218,7 @@ CoordinateTransformer+.o: CoordinateTransformer+.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/xsavecintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/mwaitxintrin.h \
  /usr/include/c++/5/bits/random.tcc /usr/include/c++/5/numeric \
- /usr/include/c++/5/bits/stl_numeric.h VectorDataTransformer.h \
- DataTransformerBase.h CoordinateBuilder.h RasterDataTransformer.h \
- PointTransformer.h
+ /usr/include/c++/5/bits/stl_numeric.h UsefulKit.h
 
 /usr/include/stdc-predef.h:
 
@@ -800,12 +798,4 @@ _Matrix.h:
 
 /usr/include/c++/5/bits/stl_numeric.h:
 
-VectorDataTransformer.h:
-
-DataTransformerBase.h:
-
-CoordinateBuilder.h:
-
-RasterDataTransformer.h:
-
-PointTransformer.h:
+UsefulKit.h:

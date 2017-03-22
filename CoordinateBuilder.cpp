@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "CoordinateBuilder.h"
-#include <map>
-//¸ù¾ÝÍ¶Ó°Êý¾ÝÎÄ¼þ¶ÁÈ¡Ö§³ÖµÄÖÐ¹úÍ¶Ó°
+//æ ¹æ®æŠ•å½±æ•°æ®æ–‡ä»¶è¯»å–æ”¯æŒçš„ä¸­å›½æŠ•å½±
 CoordinateBuilder::CoordinateBuilder(char * projFiles)
 {
 	this->projFiles = projFiles;
@@ -14,7 +13,7 @@ CoordinateBuilder::CoordinateBuilder(char * projFiles)
 		projMap.insert(make_pair(title, projString));
 	}
 	infile.close();
-	cout << "¶ÁÈ¡" << projMap.size() << "ÌõÖ§³ÖµÄÍ¶Ó°ÎÄ¼þ" << endl;
+	cout << "è¯»å–" << projMap.size() << "æ¡æ”¯æŒçš„æŠ•å½±æ–‡ä»¶" << endl;
 }
 CoordinateBuilder::CoordinateBuilder()
 {
@@ -26,7 +25,7 @@ CoordinateBuilder::CoordinateBuilder()
 CoordinateBuilder::~CoordinateBuilder()
 {
 }
-// ÓÃÓÚÉú³É¸ßË¹Í¶Ó°
+// ç”¨äºŽç”Ÿæˆé«˜æ–¯æŠ•å½±
 OGRSpatialReference* CoordinateBuilder::BulidGaussProjection(double cenLon, string geo, bool appendDegree)
 {
 	OGRSpatialReference* oSRS = new OGRSpatialReference();
@@ -34,7 +33,7 @@ OGRSpatialReference* CoordinateBuilder::BulidGaussProjection(double cenLon, stri
 	/*string wkt = projMap[geo];
 	if (wkt.length() < 1)
 	{
-		cout << "²»Ö§³ÖµÄÍ¶Ó°£¡£¡£¡" << endl;
+		cout << "ä¸æ”¯æŒçš„æŠ•å½±ï¼ï¼ï¼" << endl;
 		return NULL;
 	}
 	vector<char> v(wkt.begin(), wkt.end());

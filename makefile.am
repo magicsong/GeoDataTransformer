@@ -1,5 +1,10 @@
 AUTOMAKE_OPTIONS=foreign  
 INCLUDES= -I/usr/local/include  
 bin_PROGRAMS=CoordinateTransformer  
-CoordinateTransformer_SOURCES=CoordinateTransformer+.cpp   
+CoordinateTransformer_SOURCES=CoordinateTransformer+.cpp _Matrix.h _Matrix.cpp CoordinateBuilder.h CoordinateBuilder.cpp \
+DataTransformerBase.h DataTransformerBase.cpp PointTransformer.h PointTransformer.cpp \
+RasterDataTransformer.h RasterDataTransformer.cpp \
+stdafx.h stdafx.cpp \
+UsefulKit.h UsefulKit.cpp \
+VectorDataTransformer.h VectorDataTransformer.cpp   
 CoordinateTransformer_LDADD=-lgdal

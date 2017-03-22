@@ -1,4 +1,4 @@
-CoordinateTransformer+.o: CoordinateTransformer+.cpp \
+VectorDataTransformer.o: VectorDataTransformer.cpp \
  /usr/include/stdc-predef.h stdafx.h /usr/include/stdio.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -219,7 +219,11 @@ CoordinateTransformer+.o: CoordinateTransformer+.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/mwaitxintrin.h \
  /usr/include/c++/5/bits/random.tcc /usr/include/c++/5/numeric \
  /usr/include/c++/5/bits/stl_numeric.h VectorDataTransformer.h \
- DataTransformerBase.h CoordinateBuilder.h RasterDataTransformer.h \
+ DataTransformerBase.h CoordinateBuilder.h \
+ /usr/local/include/ogrsf_frmts.h /usr/local/include/ogr_feature.h \
+ /usr/local/include/ogr_geometry.h /usr/local/include/ogr_spatialref.h \
+ /usr/local/include/ogr_featurestyle.h \
+ /usr/local/include/cpl_atomic_ops.h /usr/local/include/ogr_api.h \
  PointTransformer.h
 
 /usr/include/stdc-predef.h:
@@ -806,6 +810,18 @@ DataTransformerBase.h:
 
 CoordinateBuilder.h:
 
-RasterDataTransformer.h:
+/usr/local/include/ogrsf_frmts.h:
+
+/usr/local/include/ogr_feature.h:
+
+/usr/local/include/ogr_geometry.h:
+
+/usr/local/include/ogr_spatialref.h:
+
+/usr/local/include/ogr_featurestyle.h:
+
+/usr/local/include/cpl_atomic_ops.h:
+
+/usr/local/include/ogr_api.h:
 
 PointTransformer.h:

@@ -5,9 +5,9 @@ public:
 	CoordinateBuilder(char* projFiles);
 	CoordinateBuilder();
 	~CoordinateBuilder();
-	// ÓÃÓÚÉú³É¸ßË¹Í¶Ó°×Ö·û´®
+	// ç”¨äºç”Ÿæˆé«˜æ–¯æŠ•å½±å­—ç¬¦ä¸²
 	OGRSpatialReference* BulidGaussProjection(double cenLon, string geo, bool appendDegree=false);
-	map<string, string> projMap;
+	unordered_map<string, string> projMap;
 private:
 	char* projFiles;
 };

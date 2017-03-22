@@ -1,12 +1,12 @@
 #ifndef _MATRIX_H
 #define _MATRIX_H
 
-//Í·ÎÄ¼ş
+//å¤´æ–‡ä»¶
 #include <stdio.h>
 #include <stdlib.h>
 
-//¾ØÕóÊı¾İ½á¹¹
-//¶şÎ¬¾ØÕó
+//çŸ©é˜µæ•°æ®ç»“æ„
+//äºŒç»´çŸ©é˜µ
 class _Matrix
 {
 private:
@@ -15,48 +15,48 @@ public:
 	int n;
 	double *arr;
 
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	_Matrix(int mm = 0, int nn = 0);
-	//ÉèÖÃm
+	//è®¾ç½®m
 	void set_m(int mm);
-	//ÉèÖÃn
+	//è®¾ç½®n
 	void set_n(int nn);
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	void init_matrix();
-	//ÊÍ·Å
+	//é‡Šæ”¾
 	void free_matrix();
-	//¶ÁÈ¡i,j×ø±êµÄÊı¾İ
-	//Ê§°Ü·µ»Ø-31415,³É¹¦·µ»ØÖµ
+	//è¯»å–i,jåæ ‡çš„æ•°æ®
+	//å¤±è´¥è¿”å›-31415,æˆåŠŸè¿”å›å€¼
 	double read(int i, int j);
-	//Ğ´Èëi,j×ø±êµÄÊı¾İ
-	//Ê§°Ü·µ»Ø-1,³É¹¦·µ»Ø1
+	//å†™å…¥i,jåæ ‡çš„æ•°æ®
+	//å¤±è´¥è¿”å›-1,æˆåŠŸè¿”å›1
 	int write(int i, int j, double val);
 	void Print_Matrix();
 };
 
-//¶şÎ¬ÔËËãÀà
+//äºŒç»´è¿ç®—ç±»
 class _Matrix_Calc
 {
 private:
 public:
 	_Matrix_Calc();
 	//C = A + B
-	//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+	//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 	int add(_Matrix *A, _Matrix *B, _Matrix *C);
 	//C = A - B
-	//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+	//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 	int subtract(_Matrix *A, _Matrix *B, _Matrix *C);
 	//C = A * B
-	//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+	//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 	int multiply(_Matrix *A, _Matrix *B, _Matrix *C);
-	//ĞĞÁĞÊ½µÄÖµ,Ö»ÄÜ¼ÆËã2 * 2,3 * 3
-	//Ê§°Ü·µ»Ø-31415,³É¹¦·µ»ØÖµ
-	double _Matrix_Calc::det(_Matrix *A);
-	//Çó×ªÖÃ¾ØÕó,B = AT
-	//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+	//è¡Œåˆ—å¼çš„å€¼,åªèƒ½è®¡ç®—2 * 2,3 * 3
+	//å¤±è´¥è¿”å›-31415,æˆåŠŸè¿”å›å€¼
+	double det(_Matrix *A);
+	//æ±‚è½¬ç½®çŸ©é˜µ,B = AT
+	//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 	int transpos(_Matrix *A, _Matrix *B);
-	//ÇóÄæ¾ØÕó,B = A^(-1)
-	//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+	//æ±‚é€†çŸ©é˜µ,B = A^(-1)
+	//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 	int inverse(_Matrix *A, _Matrix *B);
 };
 

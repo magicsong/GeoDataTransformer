@@ -17,7 +17,7 @@ VectorDataTransformer::~VectorDataTransformer()
 
 void VectorDataTransformer::ReProject(string sourceFile, string desFileName,OGRSpatialReference* sourceProj, OGRSpatialReference* desProj)
 {
-	//¶ÁÈ¡Ê¸Á¿Êı¾İ
+	//è¯»å–çŸ¢é‡æ•°æ®
 	GDALAllRegister();
 	OGRRegisterAll();
 	OGRSFDriver* poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(formatMap[CPLGetExtension(sourceFile.c_str())].c_str());//"ESRI Shapefile"
@@ -30,14 +30,14 @@ void VectorDataTransformer::ReProject(string sourceFile, string desFileName,OGRS
 		system("pause");
 		exit(1);
 	}
-	//´´½¨×ª»»Æ÷
+	//åˆ›å»ºè½¬æ¢å™¨
 	PointTransformer* pt = PointTransformer::CreateTransformer(sourceProj, desProj);
 	if (pt == NULL)
 	{
 		system("pause");
 		exit(1);
 	}
-	int laycount = poDS->GetLayerCount();//¶à¸öÍ¼²ã¶ÔÓ¦µÄÊı¾İ
+	int laycount = poDS->GetLayerCount();//å¤šä¸ªå›¾å±‚å¯¹åº”çš„æ•°æ®
 	for (int i = 0; i < laycount; i++)
 	{
 		OGRLayer  *poLayer = poDS->GetLayer(i);
@@ -47,7 +47,7 @@ void VectorDataTransformer::ReProject(string sourceFile, string desFileName,OGRS
 		while ((poFeature = poLayer->GetNextFeature()) != NULL)
 		{
 			OGRFeature* newFeature = OGRFeature::CreateFeature(poFeature->GetDefnRef());
-			//¸´ÖÆ×Ö¶Î
+			//å¤åˆ¶å­—æ®µ
 			vector<int> mapFields(poFeature->GetFieldCount(), -1);
 			newFeature->SetFieldsFrom(poFeature, &mapFields[0]);
 			OGRGeometry *poGeometry;
@@ -61,7 +61,7 @@ void VectorDataTransformer::ReProject(string sourceFile, string desFileName,OGRS
 			}
 			else if (wkbFlatten(poGeometry->getGeometryType()) == wkbLineString)
 			{
-				//´¦ÀíÏß¶Î
+				//å¤„ç†çº¿æ®µ
 				OGRLineString* poLine = (OGRLineString*)poGeometry;
 				/*int count = poLine->getNumPoints();
 				vector<double> vecx(count), vecy(count);
@@ -80,7 +80,7 @@ void VectorDataTransformer::ReProject(string sourceFile, string desFileName,OGRS
 			}
 			else
 			{
-				cout << "²»Ö§³ÖµÄ¼¸ºÎ¸ñÊ½£¡" << endl;
+				cout << "ä¸æ”¯æŒçš„å‡ ä½•æ ¼å¼ï¼" << endl;
 				return;
 			}
 			newLayer->CreateFeature(newFeature);

@@ -3,13 +3,14 @@
 
 AC_PREREQ([2.69])
 AC_INIT(CoordinateTransform, 1.0.0.0, xuetaomagicsong@gmail.com)
-AC_CONFIG_SRCDIR([_Matrix.h])
+AM_INIT_AUTOMAKE(CoordinateTransform,1.0.0.0)
+AC_CONFIG_SRCDIR([CoordinateTransformer+.cpp])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
-
+AX_CXX_COMPILE_STDCXX
 # Checks for libraries.
 
 # Checks for header files.

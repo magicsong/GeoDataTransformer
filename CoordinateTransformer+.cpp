@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 		CoordinateBuilder* cb = new CoordinateBuilder();
 		OGRSpatialReference* sourceProj = cb->BulidGaussProjection(stod(argv[4]), argv[3]);
 		OGRSpatialReference* desProj = cb->BulidGaussProjection(stod(argv[7]), argv[6]);
-		vdt->ReProject(argv[2], argv[5], sourceProj, desProj);
+		vdt->ReProject(argv[2], argv[5], sourceProj, desProj);		
 	}
 	else if (strcmp("-r", argv[1])==0)
 	{

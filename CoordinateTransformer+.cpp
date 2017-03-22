@@ -9,6 +9,11 @@
 using namespace std;
 int main(int argc, char* argv[])
 {
+	if(argc<=1)
+	{
+		cout<<"输入参数不足！程序退出"<<endl;
+		return 0;
+	}
 	if (strcmp("-v", argv[1])==0)
 	{
 		//矢量模式

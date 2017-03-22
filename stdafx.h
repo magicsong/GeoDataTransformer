@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <iostream>
-#include<fstream>
+#include <fstream>
 #include "gdal_priv.h"
 #include "gdalwarper.h"
 #include <ogr_spatialref.h>
@@ -16,9 +16,8 @@
 #include "cpl_conv.h" //for CPLMalloc() 
 #include <iomanip>
 #include "_Matrix.h"
-#include<map>
-#include<math.h>
-#include<unordered_map>
+#include <math.h>
+#include <unordered_map>
 #include <algorithm>
 #include <cctype>
 using namespace std;

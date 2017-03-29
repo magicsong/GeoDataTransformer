@@ -4,3 +4,4 @@ TIF~GTiff
 TIFF~GTiff
 IMG~HFA
 GDB~FileGDB
+MDB~MDB

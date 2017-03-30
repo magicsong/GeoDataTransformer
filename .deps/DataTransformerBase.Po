@@ -217,7 +217,7 @@ DataTransformerBase.o: DataTransformerBase.cpp /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/mwaitxintrin.h \
  /usr/include/c++/5/bits/random.tcc /usr/include/c++/5/numeric \
  /usr/include/c++/5/bits/stl_numeric.h DataTransformerBase.h \
- CoordinateBuilder.h
+ CoordinateBuilder.h UsefulKit.h
 
 /usr/include/stdc-predef.h:
 
@@ -792,3 +792,5 @@ _Matrix.h:
 DataTransformerBase.h:
 
 CoordinateBuilder.h:
+
+UsefulKit.h:

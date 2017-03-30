@@ -7,9 +7,9 @@ public:
 	static PointTransformer* CreateTransfromer(OGRSpatialReference* From, OGRSpatialReference* To, OGRSpatialReference* GCPFrom, OGRSpatialReference* GCPTo, _Matrix*m);
 	static _Matrix* GetTransMatrix(string sourceFile, string desFile);
 
-	// ÓÃÓÚÏàÍ¬ÍÖÇòÌå×ª»»
+	// ç”¨äºç›¸åŒæ¤­çƒä½“è½¬æ¢
 	int Project(double* x, double* y, int count);
-	// ÓÃ¿ØÖÆµãÀ´×ª»»²ÎÊı
+	// ç”¨æ§åˆ¶ç‚¹æ¥è½¬æ¢å‚æ•°
 	OGRCoordinateTransformation* GetTransformer()
 	{
 		return projTransformer;

@@ -24,18 +24,18 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	int nXsize = sourceDs->GetRasterXSize();
 	int nYsize = sourceDs->GetRasterYSize();
 	sourceDs->GetGeoTransform(adfDstGeoTransform);
-	dbX[0] = adfDstGeoTransform[0];    //×óÉÏ½Çµã×ø±ê
+	dbX[0] = adfDstGeoTransform[0];    //å·¦ä¸Šè§’ç‚¹åæ ‡
 	dbY[0] = adfDstGeoTransform[3];
 
-	//ÓÒÉÏ½Ç×ø±ê
+	//å³ä¸Šè§’åæ ‡
 	dbX[1] = adfDstGeoTransform[0] + nXsize*adfDstGeoTransform[1];
 	dbY[1] = adfDstGeoTransform[3];
 
-	//ÓÒÏÂ½Çµã×ø±ê
+	//å³ä¸‹è§’ç‚¹åæ ‡
 	dbX[2] = adfDstGeoTransform[0] + nXsize*adfDstGeoTransform[1] + nYsize*adfDstGeoTransform[2];
 	dbY[2] = adfDstGeoTransform[3] + nXsize*adfDstGeoTransform[4] + nYsize*adfDstGeoTransform[5];
 
-	//×óÏÂ½Ç×ø±ê
+	//å·¦ä¸‹è§’åæ ‡
 	dbX[3] = adfDstGeoTransform[0];
 	dbY[3] = adfDstGeoTransform[3] + nYsize*adfDstGeoTransform[5];
 
@@ -70,7 +70,7 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	gcpPoints[2].dfGCPLine = nYsize - 1; gcpPoints[2].dfGCPPixel = nXsize - 1;
 	gcpPoints[3].dfGCPLine = nYsize - 1; gcpPoints[3].dfGCPPixel = 0;
 	GDALGCPsToGeoTransform(4, gcpPoints, adfDstGeoTransform, TRUE);
-	// ½¨Á¢±ä»»Ñ¡Ïî 
+	// å»ºç«‹å˜æ¢é€‰é¡¹ 
 	GDALWarpOptions* psWarpOptions = GDALCreateWarpOptions();
 	psWarpOptions->hSrcDS = sourceDs;
 
@@ -94,7 +94,7 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	GDALDriver* outputDriver = (GDALDriver*)GDALGetDriverByName(pszFormat);
 	GDALDataset* hDstDS = outputDriver->CreateCopy(outputFileName, sourceDs, false, NULL,NULL, NULL);
 
-	// ´´½¨ÖØÍ¶Ó°±ä»»º¯Êı    
+	// åˆ›å»ºé‡æŠ•å½±å˜æ¢å‡½æ•°    
 	psWarpOptions->pTransformerArg = GDALCreateGenImgProjTransformer(sourceDs, "",hDstDS, "", 0, 100, 0);
 	if (psWarpOptions->pTransformerArg == NULL)
 	{
@@ -102,24 +102,24 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	}
 	if (hDstDS == NULL)
 		{
-			cout << "´´½¨Êä³öÎÄ¼şÊ§°Ü" << endl;
+			cout << "åˆ›å»ºè¾“å‡ºæ–‡ä»¶å¤±è´¥" << endl;
 			system("pause");
 			exit(1);
 		}
-	// Ğ´ÈëÍ¶Ó°
+	// å†™å…¥æŠ•å½±
 	psWarpOptions->hDstDS = hDstDS;
 	char* proj;
 	GCPTo->exportToWkt(&proj);
 	hDstDS->SetProjection(proj);
 	GDALSetGeoTransform(hDstDS, adfDstGeoTransform);
-	// ¸´ÖÆÑÕÉ«±í£¬Èç¹ûÓĞµÄ»°    
+	// å¤åˆ¶é¢œè‰²è¡¨ï¼Œå¦‚æœæœ‰çš„è¯    
 	GDALColorTableH hCT;
 	hCT = GDALGetRasterColorTable(GDALGetRasterBand(sourceDs, 1));
 	if (hCT != NULL)
 		GDALSetRasterColorTable(GDALGetRasterBand(hDstDS, 1), hCT);
 
 
-	// ³õÊ¼»¯²¢ÇÒÖ´ĞĞ±ä»»²Ù×÷    
+	// åˆå§‹åŒ–å¹¶ä¸”æ‰§è¡Œå˜æ¢æ“ä½œ    
 	GDALWarpOperation oOperation;
 	oOperation.Initialize(psWarpOptions);
 	oOperation.ChunkAndWarpImage(0, 0, GDALGetRasterXSize(hDstDS), GDALGetRasterYSize(hDstDS));
@@ -145,7 +145,7 @@ int RasterDataTransformer::Transform(string outputFile, OGRSpatialReference * To
 	{
 		if (M == NULL)
 		{
-			cout << "²»Í¬µÄÍÖÇòÌå×ª»»ĞèÒª¿ØÖÆµã£¡" << endl;
+			cout << "ä¸åŒçš„æ¤­çƒä½“è½¬æ¢éœ€è¦æ§åˆ¶ç‚¹ï¼" << endl;
 			return -1;
 		}
 		

@@ -6,6 +6,7 @@ public:
 	UsefulKit();
 	~UsefulKit();
 	static string FindFileName(string path, bool hasExtention);
+	static string TrimEnd(string line,char ch);
 	template <typename T> void PrintArray(T* arrayToShow, int count, char sp=',')
 	{
 		for (int i = 0; i < count; i++)

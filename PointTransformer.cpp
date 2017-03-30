@@ -5,7 +5,8 @@
 
 PointTransformer::PointTransformer()
 {
-
+    fromTransformer=NULL;
+	toTransformer=NULL;
 }
 
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DataTransformerBase.h"
-
+#include "UsefulKit.h"
 
 
 
@@ -10,14 +10,14 @@ DataTransformerBase::DataTransformerBase(bool isVector) :IsVector(isVector)
 	myCoordianteBuilder = new CoordinateBuilder();
 	GDALAllRegister();
 	CPLSetConfigOption("GDAL_FILENAME_IS_UTF8", "NO");
-	//¶ÁÈ¡¸ñÊ½ÎÄ¼şÅäÖÃ
-	ifstream in("formats.txt");
+	//è¯»å–æ ¼å¼æ–‡ä»¶é…ç½®
+	ifstream in("formats.txt");//æ¢è¡Œç¬¦æœ‰å¯èƒ½æ˜¯/r/n
 	while (!in.eof())
 	{
 		string line;
 		getline(in, line);
 		int index = line.find_first_of('~');
-		formatMap.insert(make_pair(line.substr(0, index - 1), line.substr(index + 1)));
+		formatMap.insert(make_pair(line.substr(0, index - 1), UsefulKit::TrimEnd(line.substr(index + 1),'\r')));
 	}
 	in.close();
 }
@@ -35,7 +35,7 @@ void DataTransformerBase::ReadFile(string fileName)
 	InputFile = (GDALDataset*)GDALOpen(fileName.c_str(), GA_ReadOnly);
 	if (InputFile == nullptr)
 	{
-		cout << "´ò¿ªÎÄ¼şÊ§°Ü£¡" << endl;
+		cout << "æ‰“å¼€æ–‡ä»¶å¤±è´¥ï¼" << endl;
 		throw("File Open Failed");
 	}
 }

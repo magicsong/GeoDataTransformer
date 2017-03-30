@@ -20,7 +20,7 @@ PointTransformer* PointTransformer::CreateTransformer(char * FromWKT, char * ToW
 	OGRCoordinateTransformation* projTransformer = OGRCreateCoordinateTransformation(fromProj, toProj);
 	if (projTransformer == NULL)
 	{
-		cout << "´´½¨Í¶Ó°×ª»»Ê§°Ü" << endl;
+		cout << "åˆ›å»ºæŠ•å½±è½¬æ¢å¤±è´¥" << endl;
 		return NULL;
 	}
 	pt->projTransformer = projTransformer;
@@ -32,7 +32,7 @@ PointTransformer * PointTransformer::CreateTransformer(OGRSpatialReference * Fro
 	OGRCoordinateTransformation* projTransformer = OGRCreateCoordinateTransformation(From, To);
 	if (projTransformer == NULL)
 	{
-		cout << "´´½¨Í¶Ó°×ª»»Ê§°Ü" << endl;
+		cout << "åˆ›å»ºæŠ•å½±è½¬æ¢å¤±è´¥" << endl;
 		return NULL;
 	}
 	PointTransformer* pt = new PointTransformer();
@@ -49,7 +49,7 @@ PointTransformer * PointTransformer::CreateTransfromer(OGRSpatialReference * Fro
 		pt->fromTransformer = OGRCreateCoordinateTransformation(From, GCPFrom);
 		if (pt->fromTransformer == nullptr)
 		{
-			cout << "´íÎó£¡Êý¾ÝÔ´Í¶Ó°Óë¿ØÖÆµãÔ´Í¶Ó°ÎÞ·¨×ª»»£¡" << endl;
+			cout << "é”™è¯¯ï¼æ•°æ®æºæŠ•å½±ä¸ŽæŽ§åˆ¶ç‚¹æºæŠ•å½±æ— æ³•è½¬æ¢ï¼" << endl;
 			return nullptr;
 		}
 	}
@@ -58,7 +58,7 @@ PointTransformer * PointTransformer::CreateTransfromer(OGRSpatialReference * Fro
 		pt->toTransformer = OGRCreateCoordinateTransformation(To, GCPTo);
 		if (pt->toTransformer == nullptr)
 		{
-			cout << "´íÎó£¡Êý¾ÝÄ¿±êÍ¶Ó°Óë¿ØÖÆµãÄ¿±êÍ¶Ó°ÎÞ·¨×ª»»£¡" << endl;
+			cout << "é”™è¯¯ï¼æ•°æ®ç›®æ ‡æŠ•å½±ä¸ŽæŽ§åˆ¶ç‚¹ç›®æ ‡æŠ•å½±æ— æ³•è½¬æ¢ï¼" << endl;
 			return nullptr;
 		}
 	}
@@ -69,7 +69,7 @@ _Matrix * PointTransformer::GetTransMatrix(string sourceFile, string desFile)
 {
 	fstream filex1;
 	filex1.open(sourceFile, ios::in);
-	//filex1.open("D:\\My University\\ÑÐ¾¿ÉúÈýÄê\\ÑÐ¾¿ÉúÏîÄ¿\\¹ú·À¿Æ¼¼´óÑ§Í¶Ó°±ä»»ÏîÄ¿\\Data\\ÌÒÔ´80.txt", ios::in);
+	//filex1.open("D:\\My University\\ç ”ç©¶ç”Ÿä¸‰å¹´\\ç ”ç©¶ç”Ÿé¡¹ç›®\\å›½é˜²ç§‘æŠ€å¤§å­¦æŠ•å½±å˜æ¢é¡¹ç›®\\Data\\æ¡ƒæº80.txt", ios::in);
 	int count = 0;
 	filex1 >> count;
 	//cout << count << endl;
@@ -84,7 +84,7 @@ _Matrix * PointTransformer::GetTransMatrix(string sourceFile, string desFile)
 		//cout << id << ',' << x80[i] << ',' << y80[i] << endl;
 	}
 	filex1.close();
-	//cout << "2000×ø±ê¿ªÊ¼¶ÁÈ¡" << endl;
+	//cout << "2000åæ ‡å¼€å§‹è¯»å–" << endl;
 	filex1.open(desFile, ios::in);
 	filex1 >> count;
 	//cout << count << endl;
@@ -94,7 +94,7 @@ _Matrix * PointTransformer::GetTransMatrix(string sourceFile, string desFile)
 		filex1 >> id >> x2000[i] >> y2000[i]>>alt;
 	}
 	filex1.close();
-	//ÕâÀï¿ªÊ¼¼ÆËã²ÎÊý
+	//è¿™é‡Œå¼€å§‹è®¡ç®—å‚æ•°
 	_Matrix* B = new _Matrix(count * 2, 4);
 	_Matrix* L = new _Matrix(2 * count, 1);
 	B->init_matrix(); L->init_matrix();
@@ -117,22 +117,21 @@ _Matrix * PointTransformer::GetTransMatrix(string sourceFile, string desFile)
 	_Matrix* temp = new _Matrix(4, 2 * count);
 	temp->init_matrix();
 	_Matrix_Calc m_c;
-	m_c.transpos(B, temp);//ÏÈ×ªÖÃ
+	m_c.transpos(B, temp);//å…ˆè½¬ç½®
 	_Matrix*temp2 = new  _Matrix(4, 4);
 	temp2->init_matrix();
-	m_c.multiply(temp, B, temp2);//Ïà³Ë
+	m_c.multiply(temp, B, temp2);//ç›¸ä¹˜
 	_Matrix*temp3 = new  _Matrix(4, 4);
 	temp3->init_matrix();
 	m_c.inverse(temp2, temp3);
 	_Matrix*temp4 = new  _Matrix(4, 2 * count);
 	temp4->init_matrix();
-	m_c.multiply(temp3, temp, temp4);//³ËÉÏbµÄ×ªÖÃ
+	m_c.multiply(temp3, temp, temp4);//ä¹˜ä¸Šbçš„è½¬ç½®
 	_Matrix* M=new _Matrix(4,1);
 	M->init_matrix();
 	m_c.multiply(temp4, L, M);
-	M->Print_Matrix();
 	temp->free_matrix(); temp2->free_matrix(); temp3->free_matrix(); temp4->free_matrix();
-	cout << "×ª»»¾ØÕó¼ÆËãÍê±Ï" << endl;
+	cout << "è½¬æ¢çŸ©é˜µè®¡ç®—å®Œæ¯•" << endl;
 	return M;
 }
 
@@ -146,12 +145,12 @@ int PointTransformer::Project(double * x, double * y, int count)
 		projTransformer->Transform(count, x, y);
 	else
 	{
-		//¿ØÖÆµãÄ£Ê½
+		//æŽ§åˆ¶ç‚¹æ¨¡å¼
 		if (fromTransformer != nullptr)
 		{
 			fromTransformer->Transform(count, x, y);
 		}
-		GCPTransformer(x, y, count);//¸ù¾Ý¿ØÖÆµã×ª»»
+		GCPTransformer(x, y, count);//æ ¹æ®æŽ§åˆ¶ç‚¹è½¬æ¢
 		if (toTransformer != nullptr)
 		{
 			toTransformer->Transform(count, x, y);
@@ -160,7 +159,7 @@ int PointTransformer::Project(double * x, double * y, int count)
 	return 0;
 }
 
-// ÓÃ¿ØÖÆµãÀ´×ª»»²ÎÊý
+// ç”¨æŽ§åˆ¶ç‚¹æ¥è½¬æ¢å‚æ•°
 int PointTransformer::GCPTransformer(double* x, double* y, int count)
 {
 	double m = sqrt(M->read(0, 2)*M->read(0, 2) + M->read(0, 3)*M->read(0, 3));

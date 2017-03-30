@@ -4295,7 +4295,7 @@ fi
 
 
 AX_CXX_COMPILE_STDCXX
-CXXFLAGS='-Wall -std=gnu++0x'
+CXXFLAGS='-Wall -g -std=gnu++0x'
 # Checks for libraries.
 
 # Checks for header files.

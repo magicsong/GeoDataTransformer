@@ -11,7 +11,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CXX
 AC_PROG_CC
 AX_CXX_COMPILE_STDCXX
-CXXFLAGS='-Wall -std=gnu++0x'
+CXXFLAGS='-Wall -g -std=gnu++0x'
 # Checks for libraries.
 
 # Checks for header files.

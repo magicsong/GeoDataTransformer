@@ -7,13 +7,15 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/CoordinateTransformer",
-            "args": [],
+            "args": ["-r","/home/magicsong/文档/TestData/3155.00-517.00.tif","Xian80","111","/home/magicsong/文档/TestData/output.tif","CGCS2000","111","/home/magicsong/文档/TestData/桃源80.txt","111","/home/magicsong/文档/TestData/桃源2000.txt","111"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": true,
+            "preLaunchTask": "Makefile",
             "linux": {
                 "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb",
                 "setupCommands": [
                     {
                         "description": "Enable pretty-printing for gdb",

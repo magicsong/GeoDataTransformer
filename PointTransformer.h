@@ -7,9 +7,8 @@ public:
 	static PointTransformer* CreateTransfromer(OGRSpatialReference* From, OGRSpatialReference* To, OGRSpatialReference* GCPFrom, OGRSpatialReference* GCPTo, _Matrix*m);
 	static _Matrix* GetTransMatrix(string sourceFile, string desFile);
 
-	// 用于相同椭球体转换
 	int Project(double* x, double* y, int count);
-	// 用控制点来转换参数
+	void ProjectLine(OGRLineString* line);
 	OGRCoordinateTransformation* GetTransformer()
 	{
 		return projTransformer;

@@ -5,6 +5,7 @@ class VectorDataTransformer:DataTransformerBase
 public:
 	VectorDataTransformer(string filename, string geo, double cenLon);
 	~VectorDataTransformer();
+	//不需要控制点的转换
 	void ReProject(string sourceFile, string desFileName, OGRSpatialReference* sourceProj, OGRSpatialReference* desProj);
 
 	// 通过 DataTransformerBase 继承

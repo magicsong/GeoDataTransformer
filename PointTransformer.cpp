@@ -139,7 +139,7 @@ _Matrix * PointTransformer::GetTransMatrix(string sourceFile, string desFile)
 PointTransformer::~PointTransformer()
 {
 }
-
+//利用控制点转换
 int PointTransformer::Project(double * x, double * y, int count)
 {
 	if (this->M == nullptr)

@@ -17,7 +17,9 @@ void VectorDataTransformer::ReadFile(string filename)
 {
 	inputFileName = filename;
 	OGRRegisterAll();
-	OGRSFDriver* poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(formatMap[CPLGetExtension(filename.c_str())].c_str());//"ESRI Shapefile"
+	string ext(CPLGetExtension(filename.c_str()));
+    transform(ext.begin(), ext.end(), ext.begin(), ::toupper);
+	OGRSFDriver* poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(formatMap[ext].c_str());//"ESRI Shapefile"
 	InputFile = poDriver->Open(filename.c_str(), 1);
 	if (InputFile == nullptr)
 	{
@@ -103,7 +105,9 @@ void VectorDataTransformer::ReProject(string sourceFile, string desFileName,OGRS
 int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference * To, OGRSpatialReference * GCPFrom /*= nullptr*/, OGRSpatialReference * GCPTo /* =nullptr*/, _Matrix * M /*= nullptr*/)
 {
 	//获取输出数据驱动
-	OGRSFDriver* poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(formatMap[CPLGetExtension(outputFile.c_str())].c_str());
+	string ext(CPLGetExtension(outputFile.c_str()));
+    transform(ext.begin(), ext.end(), ext.begin(), ::toupper);
+	OGRSFDriver* poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(formatMap[ext].c_str());
 	OGRDataSource* outputDS = poDriver->CreateDataSource(outputFile.c_str(), NULL);
 	if (outputDS == NULL)
 	{
@@ -140,14 +144,14 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference * To
 				pt->Project(&x, &y, 1);
 				poPoint->setX(x);
 				poPoint->setY(y);
-				newFeature->SetGeometry(poPoint);
+				newFeature->SetGeometryDirectly(poPoint);
 			}
 			else if (wkbFlatten(poGeometry->getGeometryType()) == wkbLineString)
 			{
 				//处理线段//换行符有可能是/r/n
 				OGRLineString* poLine = (OGRLineString*)poGeometry;
 				pt->ProjectLine(poLine);
-				newFeature->SetGeometry(poLine);
+				newFeature->SetGeometryDirectly(poLine);
 			}
 			else if (wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon)
 			{

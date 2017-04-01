@@ -77,20 +77,17 @@ _Matrix *PointTransformer::GetTransMatrix(string sourceFile, string desFile)
     double *y2000 = new double[count];
     for (int i = 0; i < count; i++)
     {
-	string id, alt;
-	filex1 >> id >> x80[i] >> y80[i] >> alt;
-	//cout << id << ',' << x80[i] << ',' << y80[i] << endl;
+	    string id, alt;
+	    filex1 >> id >> x80[i] >> y80[i] >> alt;
     }
     filex1.close();
     //cout << "2000坐标开始读取" << endl;
     filex1.open(desFile, ios::in);
     filex1 >> count;
-    //cout << count << endl;
     for (int i = 0; i < count; i++)
     {
-	string id, alt;
-	string y;
-	filex1 >> id >> x2000[i] >> y2000[i] >> alt;
+	    string id, alt;
+	    filex1 >> id >> x2000[i] >> y2000[i] >> alt;
     }
     filex1.close();
     //这里开始计算参数
@@ -112,8 +109,9 @@ _Matrix *PointTransformer::GetTransMatrix(string sourceFile, string desFile)
 	L->write(2 * i + 1, 0, y2000[i]);
     }
     //cout << "Show B" << endl;
-    //B->Print_Matrix();
-    //cout << "Nnd B" << endl;
+    //B->Print_Matrix();    
+    //cout << "End B" << endl;
+    //L->Print_Matrix();
     _Matrix *temp = new _Matrix(4, 2 * count);
     temp->init_matrix();
     _Matrix_Calc m_c;
@@ -134,6 +132,7 @@ _Matrix *PointTransformer::GetTransMatrix(string sourceFile, string desFile)
     temp2->free_matrix();
     temp3->free_matrix();
     temp4->free_matrix();
+    M->Print_Matrix();
     cout << "转换矩阵计算完毕" << endl;
     return M;
 }

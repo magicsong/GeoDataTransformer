@@ -1,39 +1,39 @@
 #include "_Matrix.h"
 #include <iostream>
-//¾ØÕóÀà·½·¨
-//³õÊ¼»¯
+//çŸ©é˜µç±»æ–¹æ³•
+//åˆå§‹åŒ–
 _Matrix::_Matrix(int mm, int nn)
 {
 	m = mm;
 	n = nn;
 }
 
-//ÉèÖÃm
+//è®¾ç½®m
 void _Matrix::set_m(int mm)
 {
 	m = mm;
 }
 
-//ÉèÖÃn
+//è®¾ç½®n
 void _Matrix::set_n(int nn)
 {
 	n = nn;
 }
 
-//³õÊ¼»¯
+//åˆå§‹åŒ–
 void _Matrix::init_matrix()
 {
 	arr = new double[m * n];
 }
 
-//ÊÍ·Å
+//é‡Šæ”¾
 void _Matrix::free_matrix()
 {
 	delete[]arr;
 }
 
-//¶ÁÈ¡i,j×ø±êµÄÊı¾İ
-//Ê§°Ü·µ»Ø-31415,³É¹¦·µ»ØÖµ
+//è¯»å–i,jåæ ‡çš„æ•°æ®
+//å¤±è´¥è¿”å›-31415,æˆåŠŸè¿”å›å€¼
 double _Matrix::read(int i, int j)
 {
 	if (i >= m || j >= n)
@@ -44,8 +44,8 @@ double _Matrix::read(int i, int j)
 	return *(arr + i * n + j);
 }
 
-//Ğ´Èëi,j×ø±êµÄÊı¾İ
-//Ê§°Ü·µ»Ø-1,³É¹¦·µ»Ø1
+//å†™å…¥i,jåæ ‡çš„æ•°æ®
+//å¤±è´¥è¿”å›-1,æˆåŠŸè¿”å›1
 int _Matrix::write(int i, int j, double val)
 {
 	if (i >= m || j >= n)
@@ -64,31 +64,33 @@ void _Matrix::Print_Matrix()
 	}
 	for (int i = 0; i < m; i++)
 	{
-		for (int j = 0; j < n; j++)
+		for (int j = 0; j < n; j++){
+			std::cout.setf(std::ios::dec | std::ios::fixed);
 			std::cout << *(arr + i * n + j) << '\t';
+		}
 		std::cout << std::endl;
 	}
 }
-//¾ØÕóÔËËãÀà·½·¨
-//³õÊ¼»¯
+//çŸ©é˜µè¿ç®—ç±»æ–¹æ³•
+//åˆå§‹åŒ–
 _Matrix_Calc::_Matrix_Calc()
 {
 }
 
 //C = A + B
-//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 int _Matrix_Calc::add(_Matrix *A, _Matrix *B, _Matrix *C)
 {
 	int i = 0;
 	int j = 0;
 
-	//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÔËËã
+	//åˆ¤æ–­æ˜¯å¦å¯ä»¥è¿ç®—
 	if (A->m != B->m || A->n != B->n || \
 		A->m != C->m || A->n != C->n)
 	{
 		return -1;
 	}
-	//ÔËËã
+	//è¿ç®—
 	for (i = 0; i < C->m; i++)
 	{
 		for (j = 0; j < C->n; j++)
@@ -101,19 +103,19 @@ int _Matrix_Calc::add(_Matrix *A, _Matrix *B, _Matrix *C)
 }
 
 //C = A - B
-//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 int _Matrix_Calc::subtract(_Matrix *A, _Matrix *B, _Matrix *C)
 {
 	int i = 0;
 	int j = 0;
 
-	//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÔËËã
+	//åˆ¤æ–­æ˜¯å¦å¯ä»¥è¿ç®—
 	if (A->m != B->m || A->n != B->n || \
 		A->m != C->m || A->n != C->n)
 	{
 		return -1;
 	}
-	//ÔËËã
+	//è¿ç®—
 	for (i = 0; i < C->m; i++)
 	{
 		for (j = 0; j < C->n; j++)
@@ -126,7 +128,7 @@ int _Matrix_Calc::subtract(_Matrix *A, _Matrix *B, _Matrix *C)
 }
 
 //C = A * B
-//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 int _Matrix_Calc::multiply(_Matrix *A, _Matrix *B, _Matrix *C)
 {
 	int i = 0;
@@ -134,13 +136,13 @@ int _Matrix_Calc::multiply(_Matrix *A, _Matrix *B, _Matrix *C)
 	int k = 0;
 	double temp = 0;
 
-	//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÔËËã
+	//åˆ¤æ–­æ˜¯å¦å¯ä»¥è¿ç®—
 	if (A->m != C->m || B->n != C->n || \
 		A->n != B->m)
 	{
 		return -1;
 	}
-	//ÔËËã
+	//è¿ç®—
 	for (i = 0; i < C->m; i++)
 	{
 		for (j = 0; j < C->n; j++)
@@ -157,18 +159,18 @@ int _Matrix_Calc::multiply(_Matrix *A, _Matrix *B, _Matrix *C)
 	return 1;
 }
 
-//ĞĞÁĞÊ½µÄÖµ,Ö»ÄÜ¼ÆËã2 * 2,3 * 3
-//Ê§°Ü·µ»Ø-31415,³É¹¦·µ»ØÖµ
+//è¡Œåˆ—å¼çš„å€¼,åªèƒ½è®¡ç®—2 * 2,3 * 3
+//å¤±è´¥è¿”å›-31415,æˆåŠŸè¿”å›å€¼
 double _Matrix_Calc::det(_Matrix *A)
 {
 	double value = 0;
 
-	//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÔËËã
+	//åˆ¤æ–­æ˜¯å¦å¯ä»¥è¿ç®—
 	if (A->m != A->n || (A->m != 2 && A->m != 3))
 	{
 		return -31415;
 	}
-	//ÔËËã
+	//è¿ç®—
 	if (A->m == 2)
 	{
 		value = A->read(0, 0) * A->read(1, 1) - A->read(0, 1) * A->read(1, 0);
@@ -186,19 +188,19 @@ double _Matrix_Calc::det(_Matrix *A)
 	return value;
 }
 
-//Çó×ªÖÃ¾ØÕó,B = AT
-//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+//æ±‚è½¬ç½®çŸ©é˜µ,B = AT
+//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 int _Matrix_Calc::transpos(_Matrix *A, _Matrix *B)
 {
 	int i = 0;
 	int j = 0;
 
-	//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÔËËã
+	//åˆ¤æ–­æ˜¯å¦å¯ä»¥è¿ç®—
 	if (A->m != B->n || A->n != B->m)
 	{
 		return -1;
 	}
-	//ÔËËã
+	//è¿ç®—
 	for (i = 0; i < B->m; i++)
 	{
 		for (j = 0; j < B->n; j++)
@@ -210,7 +212,7 @@ int _Matrix_Calc::transpos(_Matrix *A, _Matrix *B)
 	return 1;
 }
 
-//´òÓ¡2Î¬¾ØÕó
+//æ‰“å°2ç»´çŸ©é˜µ
 void printff_matrix(_Matrix *A)
 {
 	int i = 0;
@@ -230,8 +232,8 @@ void printff_matrix(_Matrix *A)
 	}
 }
 
-//ÇóÄæ¾ØÕó,B = A^(-1)
-//³É¹¦·µ»Ø1,Ê§°Ü·µ»Ø-1
+//æ±‚é€†çŸ©é˜µ,B = A^(-1)
+//æˆåŠŸè¿”å›1,å¤±è´¥è¿”å›-1
 int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 {
 	int i = 0;
@@ -241,14 +243,14 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 	double temp = 0;
 	double b = 0;
 
-	//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÔËËã
+	//åˆ¤æ–­æ˜¯å¦å¯ä»¥è¿ç®—
 	if (A->m != A->n || B->m != B->n || A->m != B->m)
 	{
 		return -1;
 	}
 
 	/*
-	//Èç¹ûÊÇ2Î¬»òÕß3Î¬ÇóĞĞÁĞÊ½ÅĞ¶ÏÊÇ·ñ¿ÉÄæ
+	//å¦‚æœæ˜¯2ç»´æˆ–è€…3ç»´æ±‚è¡Œåˆ—å¼åˆ¤æ–­æ˜¯å¦å¯é€†
 	if (A->m == 2 || A->m == 3)
 	{
 	if (det(A) == 0)
@@ -258,7 +260,7 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 	}
 	*/
 
-	//Ôö¹ã¾ØÕóm = A | B³õÊ¼»¯
+	//å¢å¹¿çŸ©é˜µm = A | Båˆå§‹åŒ–
 	m.init_matrix();
 	for (i = 0; i < m.m; i++)
 	{
@@ -282,11 +284,11 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 		}
 	}
 
-	//¸ßË¹ÏûÔª
-	//±ä»»ÏÂÈı½Ç
+	//é«˜æ–¯æ¶ˆå…ƒ
+	//å˜æ¢ä¸‹ä¸‰è§’
 	for (k = 0; k < m.m - 1; k++)
 	{
-		//Èç¹û×ø±êÎªk,kµÄÊıÎª0,ÔòĞĞ±ä»»
+		//å¦‚æœåæ ‡ä¸ºk,kçš„æ•°ä¸º0,åˆ™è¡Œå˜æ¢
 		if (m.read(k, k) == 0)
 		{
 			for (i = k + 1; i < m.m; i++)
@@ -302,7 +304,7 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 			}
 			else
 			{
-				//½»»»ĞĞ
+				//äº¤æ¢è¡Œ
 				for (j = 0; j < m.n; j++)
 				{
 					temp = m.read(k, j);
@@ -312,12 +314,12 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 			}
 		}
 
-		//ÏûÔª
+		//æ¶ˆå…ƒ
 		for (i = k + 1; i < m.m; i++)
 		{
-			//»ñµÃ±¶Êı
+			//è·å¾—å€æ•°
 			b = m.read(i, k) / m.read(k, k);
-			//ĞĞ±ä»»
+			//è¡Œå˜æ¢
 			for (j = 0; j < m.n; j++)
 			{
 				temp = m.read(i, j) - b * m.read(k, j);
@@ -325,10 +327,10 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 			}
 		}
 	}
-	//±ä»»ÉÏÈı½Ç
+	//å˜æ¢ä¸Šä¸‰è§’
 	for (k = m.m - 1; k > 0; k--)
 	{
-		//Èç¹û×ø±êÎªk,kµÄÊıÎª0,ÔòĞĞ±ä»»
+		//å¦‚æœåæ ‡ä¸ºk,kçš„æ•°ä¸º0,åˆ™è¡Œå˜æ¢
 		if (m.read(k, k) == 0)
 		{
 			for (i = k + 1; i < m.m; i++)
@@ -344,7 +346,7 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 			}
 			else
 			{
-				//½»»»ĞĞ
+				//äº¤æ¢è¡Œ
 				for (j = 0; j < m.n; j++)
 				{
 					temp = m.read(k, j);
@@ -354,12 +356,12 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 			}
 		}
 
-		//ÏûÔª
+		//æ¶ˆå…ƒ
 		for (i = k - 1; i >= 0; i--)
 		{
-			//»ñµÃ±¶Êı
+			//è·å¾—å€æ•°
 			b = m.read(i, k) / m.read(k, k);
-			//ĞĞ±ä»»
+			//è¡Œå˜æ¢
 			for (j = 0; j < m.n; j++)
 			{
 				temp = m.read(i, j) - b * m.read(k, j);
@@ -367,14 +369,14 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 			}
 		}
 	}
-	//½«×ó±ß·½Õó»¯Îªµ¥Î»¾ØÕó
+	//å°†å·¦è¾¹æ–¹é˜µåŒ–ä¸ºå•ä½çŸ©é˜µ
 	for (i = 0; i < m.m; i++)
 	{
 		if (m.read(i, i) != 1)
 		{
-			//»ñµÃ±¶Êı
+			//è·å¾—å€æ•°
 			b = 1 / m.read(i, i);
-			//ĞĞ±ä»»
+			//è¡Œå˜æ¢
 			for (j = 0; j < m.n; j++)
 			{
 				temp = m.read(i, j) * b;
@@ -382,7 +384,7 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 			}
 		}
 	}
-	//ÇóµÃÄæ¾ØÕó
+	//æ±‚å¾—é€†çŸ©é˜µ
 	for (i = 0; i < B->m; i++)
 	{
 		for (j = 0; j < B->m; j++)
@@ -390,7 +392,7 @@ int _Matrix_Calc::inverse(_Matrix *A, _Matrix *B)
 			B->write(i, j, m.read(i, j + m.m));
 		}
 	}
-	//ÊÍ·ÅÔö¹ã¾ØÕó
+	//é‡Šæ”¾å¢å¹¿çŸ©é˜µ
 	m.free_matrix();
 
 	return 1;

@@ -17,7 +17,7 @@ DataTransformerBase::DataTransformerBase()
 		string line;
 		getline(in, line);
 		int index = line.find_first_of('~');
-		formatMap.insert(make_pair(line.substr(0, index - 1), UsefulKit::TrimEnd(line.substr(index + 1),'\r')));
+		formatMap.insert(make_pair(line.substr(0, index), UsefulKit::TrimEnd(line.substr(index + 1),'\r')));
 	}
 	in.close();
 }

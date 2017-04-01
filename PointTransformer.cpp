@@ -2,7 +2,6 @@
 #include "PointTransformer.h"
 #include "_Matrix.h"
 #include "CoordinateBuilder.h"
-
 PointTransformer::PointTransformer()
 {
     fromTransformer = NULL;
@@ -39,7 +38,7 @@ PointTransformer *PointTransformer::CreateTransformer(OGRSpatialReference *From,
     return pt;
 }
 
-PointTransformer *PointTransformer::CreateTransfromer(OGRSpatialReference *From, OGRSpatialReference *To, OGRSpatialReference *GCPFrom, OGRSpatialReference *GCPTo, _Matrix *m)
+PointTransformer *PointTransformer::CreateTransformer(OGRSpatialReference *From, OGRSpatialReference *To, OGRSpatialReference *GCPFrom, OGRSpatialReference *GCPTo, _Matrix *m)
 {
     PointTransformer *pt = new PointTransformer();
     pt->M = m;
@@ -182,7 +181,7 @@ void PointTransformer::ProjectLine(OGRLineString *line)
 			toTransformer->Transform(count, &x[0], &y[0]);
 		}
     }
-    line.setPoints(count,&x[0],&y[0]);
+    line->setPoints(count,&x[0],&y[0]);
 }
 // 用控制点来转换参数
 int PointTransformer::GCPTransformer(double *x, double *y, int count)

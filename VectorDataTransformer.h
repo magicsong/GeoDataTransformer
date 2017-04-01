@@ -1,5 +1,6 @@
 #pragma once
 #include "DataTransformerBase.h"
+#include "ogrsf_frmts.h"
 class VectorDataTransformer:DataTransformerBase
 {
 public:
@@ -9,6 +10,8 @@ public:
 	void ReProject(string sourceFile, string desFileName, OGRSpatialReference* sourceProj, OGRSpatialReference* desProj);
 
 	// 通过 DataTransformerBase 继承
-	virtual int Transform(string outputFile, OGRSpatialReference * To, OGRSpatialReference * GCPFrom = nullptr, OGRSpatialReference * GCPTo = nullptr, _Matrix * M = nullptr) override;
+	virtual int Transform(string outputFile, OGRSpatialReference* To, OGRSpatialReference * GCPFrom = nullptr, OGRSpatialReference * GCPTo = nullptr, _Matrix * M = nullptr) override;
+    virtual void ReadFile(string filename);
+	OGRDataSource* InputFile;
 };
 

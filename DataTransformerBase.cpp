@@ -5,7 +5,7 @@
 
 
 
-DataTransformerBase::DataTransformerBase(bool isVector) :IsVector(isVector)
+DataTransformerBase::DataTransformerBase()
 {
 	myCoordianteBuilder = new CoordinateBuilder();
 	GDALAllRegister();
@@ -29,13 +29,3 @@ DataTransformerBase::~DataTransformerBase()
 
 }
 
-void DataTransformerBase::ReadFile(string fileName)
-{
-	inputFileName = fileName;
-	InputFile = (GDALDataset*)GDALOpen(fileName.c_str(), GA_ReadOnly);
-	if (InputFile == nullptr)
-	{
-		cout << "打开文件失败！" << endl;
-		throw("File Open Failed");
-	}
-}

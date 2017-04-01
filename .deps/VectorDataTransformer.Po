@@ -222,7 +222,7 @@ VectorDataTransformer.o: VectorDataTransformer.cpp \
  /usr/local/include/ogr_geometry.h /usr/local/include/ogr_spatialref.h \
  /usr/local/include/ogr_featurestyle.h \
  /usr/local/include/cpl_atomic_ops.h /usr/local/include/ogr_api.h \
- PointTransformer.h
+ PointTransformer.h /usr/local/include/ogr_geometry.h UsefulKit.h
 
 /usr/include/stdc-predef.h:
 
@@ -815,3 +815,7 @@ CoordinateBuilder.h:
 /usr/local/include/ogr_api.h:
 
 PointTransformer.h:
+
+/usr/local/include/ogr_geometry.h:
+
+UsefulKit.h:

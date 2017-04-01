@@ -4,7 +4,7 @@
 #include "UsefulKit.h"
 
 
-RasterDataTransformer::RasterDataTransformer(string filename, string geo, double cenLon) :DataTransformerBase(false)
+RasterDataTransformer::RasterDataTransformer(string filename, string geo, double cenLon) :DataTransformerBase()
 {
 	ReadFile(filename);
 	InputProj = myCoordianteBuilder->BulidGaussProjection(cenLon, geo);
@@ -14,7 +14,16 @@ RasterDataTransformer::RasterDataTransformer(string filename, string geo, double
 RasterDataTransformer::~RasterDataTransformer()
 {
 }
-
+void RasterDataTransformer::ReadFile(string filename)
+{
+	inputFileName = filename;
+	InputFile = (GDALDataset*)GDALOpen(filename.c_str(), GA_ReadOnly);
+	if (InputFile == nullptr)
+	{
+		cout << "打开文件失败！" << endl;
+		throw("File Open Failed");
+	}
+}
 int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char* pszFormat, const char* outputFileName, GDALResampleAlg resample, OGRSpatialReference * From, OGRSpatialReference* To, OGRSpatialReference * GCPFrom, OGRSpatialReference * GCPTo, _Matrix * M)
 {
 	double adfDstGeoTransform[6];
@@ -39,7 +48,7 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	dbX[3] = adfDstGeoTransform[0];
 	dbY[3] = adfDstGeoTransform[3] + nYsize*adfDstGeoTransform[5];
 
-	PointTransformer* gcppt = PointTransformer::CreateTransfromer(From, To, GCPFrom, GCPTo, M);
+	PointTransformer* gcppt = PointTransformer::CreateTransformer(From, To, GCPFrom, GCPTo, M);
 	UsefulKit* uk = new UsefulKit();
 	//cout << "X........." << endl;
 	//uk->PrintArray(dbX, 4);
@@ -129,7 +138,6 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	GDALClose(sourceDs);
 	return 0;
 }
-
 int RasterDataTransformer::Transform(string outputFile, OGRSpatialReference * To, OGRSpatialReference * GCPFrom /*= nullptr*/, OGRSpatialReference * GCPTo /*= nullptr*/, _Matrix * M /*= nullptr*/)
 {
 	char* fromProj, *toProj;

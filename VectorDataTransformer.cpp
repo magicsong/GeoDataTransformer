@@ -1,11 +1,9 @@
 #include "stdafx.h"
 #include "VectorDataTransformer.h"
-#include "ogrsf_frmts.h"
 #include "ogr_api.h"
-#include "gdal_priv.h"
 #include "PointTransformer.h"
 #include "UsefulKit.h"
-VectorDataTransformer::VectorDataTransformer(string filename, string geo, double cenLon):DataTransformerBase(true)
+VectorDataTransformer::VectorDataTransformer(string filename, string geo, double cenLon):DataTransformerBase()
 {
 	ReadFile(filename);
 	InputProj = myCoordianteBuilder->BulidGaussProjection(cenLon, geo);
@@ -15,7 +13,18 @@ VectorDataTransformer::VectorDataTransformer(string filename, string geo, double
 VectorDataTransformer::~VectorDataTransformer()
 {
 }
-
+void VectorDataTransformer::ReadFile(string filename)
+{
+	inputFileName = filename;
+	OGRRegisterAll();
+	OGRSFDriver* poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(formatMap[CPLGetExtension(filename.c_str())].c_str());//"ESRI Shapefile"
+	InputFile = poDriver->Open(filename.c_str(), 1);
+	if (InputFile == nullptr)
+	{
+		cout << "打开文件失败！" << endl;
+		throw("File Open Failed");
+	}	
+}
 void VectorDataTransformer::ReProject(string sourceFile, string desFileName,OGRSpatialReference* sourceProj, OGRSpatialReference* desProj)
 {
 	//读取矢量数据
@@ -89,29 +98,28 @@ void VectorDataTransformer::ReProject(string sourceFile, string desFileName,OGRS
 	}
 	GDALClose(poDS);
 	GDALClose(outputDS);
-	return 0;
 }
 
 int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference * To, OGRSpatialReference * GCPFrom /*= nullptr*/, OGRSpatialReference * GCPTo /* =nullptr*/, _Matrix * M /*= nullptr*/)
 {
 	//获取输出数据驱动
-	OGRSFDriver* poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(formatMap[CPLGetExtension(sourceFile.c_str())].c_str());
+	OGRSFDriver* poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(formatMap[CPLGetExtension(outputFile.c_str())].c_str());
 	OGRDataSource* outputDS = poDriver->CreateDataSource(outputFile.c_str(), NULL);
 	if (outputDS == NULL)
 	{
 		printf("Open or create file failed.\n");
 		exit(1);
 	}
-	PointTransformer* pt = PointTransformer::CreateTransformer(inputFile, To,GCPFrom,GCPTo,M);
+	PointTransformer* pt = PointTransformer::CreateTransformer(InputProj,To,GCPFrom,GCPTo,M);
 	if (pt == NULL)
 	{
 		cout<<"创建控制点转换器失败"<<endl;
 		exit(1);
 	}
-	int laycount = poDS->GetLayerCount();//多个图层对应的数据
+	int laycount = InputFile->GetLayerCount();//多个图层对应的数据
 	for (int i = 0; i < laycount; i++)
 	{
-		OGRLayer  *poLayer = inputFile->GetLayer(i);
+		OGRLayer  *poLayer = InputFile->GetLayer(i);
 		OGRLayer* newLayer = outputDS->CreateLayer(CPLGetFilename(outputFile.c_str()), To, poLayer->GetGeomType(), NULL);
 		OGRFeature *poFeature;
 		poLayer->ResetReading();
@@ -138,7 +146,7 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference * To
 			{
 				//处理线段//换行符有可能是/r/n
 				OGRLineString* poLine = (OGRLineString*)poGeometry;
-				pt->ProjectLine(poline);
+				pt->ProjectLine(poLine);
 				newFeature->SetGeometry(poLine);
 			}
 			else if (wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon)
@@ -146,7 +154,7 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference * To
 				OGRPolygon* poPolygon = (OGRPolygon*)poGeometry;
 				//处理外环
 				OGRLinearRing* exRing=poPolygon->getExteriorRing();
-				OGRPolygon* newPolygon=new Polygon();
+				OGRPolygon* newPolygon=new OGRPolygon();
 				pt->ProjectLine(exRing);
 				newPolygon->addRing(exRing);
 				//处理内环
@@ -157,18 +165,18 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference * To
 					pt->ProjectLine(inRing);
 				    newPolygon->addRing(inRing);
 				}
-				newFeature->setGeometryDirectly(newPolygon);
+				newFeature->SetGeometryDirectly(newPolygon);
 			}
 			else
 			{
 				cout << "暂不支持的几何格式！" << endl;
-				return;
+				return -1;
 			}
 			newLayer->CreateFeature(newFeature);
 			OGRFeature::DestroyFeature(poFeature);
 		}
 	}
-	GDALClose(poDS);
+	GDALClose(InputFile);
 	GDALClose(outputDS);
 	return 0;
 }

@@ -9,7 +9,9 @@ DataTransformerBase::DataTransformerBase()
 {
 	myCoordianteBuilder = new CoordinateBuilder();
 	GDALAllRegister();
+	OGRRegisterAll();
 	CPLSetConfigOption("GDAL_FILENAME_IS_UTF8", "NO");
+    CPLSetConfigOption("MDB_DRIVER_TEMPLATE", "DRIVER=Microsoft Access Driver (*.mdb, *.accdb);DBQ=%s");
 	//读取格式文件配置
 	ifstream in("formats.txt");//换行符有可能是/r/n
 	while (!in.eof())

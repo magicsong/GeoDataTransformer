@@ -8,7 +8,9 @@
 #include "PointTransformer.h"
 int main(int argc, char *argv[])
 {
-    if (argc <= 1)
+    //ForTest
+	//-v /home/magicsong/Documents/TestData/Test.mdb Xian80 110.25 /home/magicsong/Documents/TestData/OutputMDB.shp CGCS2000 110.25 /home/magicsong/Documents/TestData/80points.txt 110.25 /home/magicsong/Documents/TestData/2000points.txt 110.25
+	if (argc <= 1)
     {
 	cout << "输入参数不足！程序退出" << endl;
 	return 0;
@@ -16,7 +18,7 @@ int main(int argc, char *argv[])
     if (strcmp("-v", argv[1]) == 0)
     {
 	//矢量模式
-	VectorDataTransformer *vdt = new VectorDataTransformer(string(argv[2]), string(argv[3]), stod(argv[4]));
+	VectorDataTransformer *vdt = new VectorDataTransformer(argv[2], string(argv[3]), stod(argv[4]));
 	CoordinateBuilder *cb = new CoordinateBuilder();
 	OGRSpatialReference *sourceProj = cb->BulidGaussProjection(stod(argv[4]), argv[3]);
 	OGRSpatialReference *desProj = cb->BulidGaussProjection(stod(argv[7]), argv[6]);
@@ -37,7 +39,7 @@ int main(int argc, char *argv[])
     }
     else if (strcmp("-r", argv[1]) == 0)
     {
-	RasterDataTransformer *rdt = new RasterDataTransformer(string(argv[2]), string(argv[3]), stod(argv[4]));
+	RasterDataTransformer *rdt = new RasterDataTransformer(argv[2], string(argv[3]), stod(argv[4]));
 	CoordinateBuilder *cb = new CoordinateBuilder();
 	OGRSpatialReference *sourceProj = cb->BulidGaussProjection(stod(argv[4]), argv[3]);
 	OGRSpatialReference *desProj = cb->BulidGaussProjection(stod(argv[7]), argv[6]);

@@ -4,7 +4,7 @@
 #include "UsefulKit.h"
 
 
-RasterDataTransformer::RasterDataTransformer(string filename, string geo, double cenLon) :DataTransformerBase()
+RasterDataTransformer::RasterDataTransformer(const char* filename, string geo, double cenLon) :DataTransformerBase()
 {
 	ReadFile(filename);
 	InputProj = myCoordianteBuilder->BulidGaussProjection(cenLon, geo);
@@ -14,10 +14,10 @@ RasterDataTransformer::RasterDataTransformer(string filename, string geo, double
 RasterDataTransformer::~RasterDataTransformer()
 {
 }
-void RasterDataTransformer::ReadFile(string filename)
+void RasterDataTransformer::ReadFile(const char* filename)
 {
-	inputFileName = filename;
-	InputFile = (GDALDataset*)GDALOpen(filename.c_str(), GA_ReadOnly);
+	inputFileName = string(filename);
+	InputFile = (GDALDataset*)GDALOpen(filename, GA_ReadOnly);
 	if (InputFile == nullptr)
 	{
 		cout << "打开文件失败！" << endl;

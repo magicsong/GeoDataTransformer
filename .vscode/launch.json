@@ -7,7 +7,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/CoordinateTransformer",
-            "args": ["-v","/home/magicsong/Documents/TestData/TestShapes80/HYDPT.shp","Xian80","110.25","/home/magicsong/Documents/TestData/HYDPT2000.shp","CGCS2000","110.25","/home/magicsong/Documents/TestData/80points.txt","110.25","/home/magicsong/Documents/TestData/2000points.txt","110.25"],
+            "args": ["-v","/home/magicsong/Documents/TestData/Test.mdb","Xian80","110.25","/home/magicsong/Documents/TestData/OutputMDB.shp","CGCS2000","110.25","/home/magicsong/Documents/TestData/80points.txt","110.25","/home/magicsong/Documents/TestData/2000points.txt","110.25"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [],

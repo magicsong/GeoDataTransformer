@@ -3,7 +3,7 @@
 #include "ogr_api.h"
 #include "PointTransformer.h"
 #include "UsefulKit.h"
-VectorDataTransformer::VectorDataTransformer(const char* filename, string geo, double cenLon) : DataTransformerBase()
+VectorDataTransformer::VectorDataTransformer(const char *filename, string geo, double cenLon) : DataTransformerBase()
 {
     ReadFile(filename);
     InputProj = myCoordianteBuilder->BulidGaussProjection(cenLon, geo);
@@ -12,7 +12,7 @@ VectorDataTransformer::VectorDataTransformer(const char* filename, string geo, d
 VectorDataTransformer::~VectorDataTransformer()
 {
 }
-void VectorDataTransformer::ReadFile(const char* filename)
+void VectorDataTransformer::ReadFile(const char *filename)
 {
     inputFileName = string(filename);
     string ext(CPLGetExtension(filename));
@@ -119,7 +119,7 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference *To,
     for (int i = 0; i < laycount; i++)
     {
 	OGRLayer *poLayer = InputFile->GetLayer(i);
-	OGRLayer *newLayer = outputDS->CreateLayer(poLayer.GetName(), To, poLayer->GetGeomType(), NULL);
+	OGRLayer *newLayer = outputDS->CreateLayer(poLayer->GetName(), To, poLayer->GetGeomType(), NULL);
 	OGRFeature *poFeature;
 	poLayer->ResetReading();
 	while ((poFeature = poLayer->GetNextFeature()) != NULL)
@@ -147,19 +147,19 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference *To,
 		pt->ProjectLine(poLine);
 		newFeature->SetGeometryDirectly(poLine);
 	    }
-		else if(wkbFlatten(poGeometry->getGeometryType()) ==  wkbMultiLineString)
+	    else if (wkbFlatten(poGeometry->getGeometryType()) == wkbMultiLineString)
+	    {
+		OGRMultiLineString *poMultiLineString = (OGRMultiLineString *)poGeometry;
+		OGRMultiLineString *newMultiLineString = new OGRMultiLineString();
+		int num = poMultiLineString->getNumGeometries();
+		for (int i = 0; i < num; i++)
 		{
-			 OGRMultiLineString* poMultiLineString=(OGRMultiLineString*)poGeometry;
-			 OGRMultiLineString* newMultiLineString=new OGRMultiLineString();
-			 int num=poMultiLineString.getNumGeometries();			 
-			 for(int i=0;i<num;i++)
-			 {
-				 OGRLineString* line=(OGRLineString*)poMultiLineString.getGeometryRef(i).clone();
-				 pt->ProjectLine(line);
-				 newMultiLineString.addGeometryDirectly(line);
-			 }
-			 newFeature->SetGeometryDirectly(newMultiLineString);
+		    OGRLineString *line = (OGRLineString *)poMultiLineString->getGeometryRef(i)->clone();
+		    pt->ProjectLine(line);
+		    newMultiLineString->addGeometryDirectly(line);
 		}
+		newFeature->SetGeometryDirectly(newMultiLineString);
+	    }
 	    else if (wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon)
 	    {
 		OGRPolygon *poPolygon = (OGRPolygon *)poGeometry;
@@ -172,23 +172,37 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference *To,
 		int iRing = poPolygon->getNumInteriorRings();
 		for (int i = 0; i < iRing; i++)
 		{
-		    OGRLinearRing *inRing = poPolygon->getInteriorRing(iRing);
+		    OGRLinearRing *inRing = poPolygon->getInteriorRing(i);
 		    pt->ProjectLine(inRing);
 		    newPolygon->addRing(inRing);
 		}
 		newFeature->SetGeometryDirectly(newPolygon);
 	    }
-		else if(wkbFlatten(poGeometry->getGeometryType()) ==  wkbMultiPolygon)
+	    else if (wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPolygon)
+	    {
+		OGRMultiPolygon *poMultiPolygon = (OGRMultiPolygon *)poGeometry;
+		OGRMultiPolygon *newMultiPolygon = new OGRMultiPolygon();
+		int num = poMultiPolygon->getNumGeometries();
+		for (int i = 0; i < num; i++)
 		{
-			OGRMultiPolygon* poMultiPolygon=(OGRMultiPolygon*)poGeometry;
-			OGRMultiPolygon* newMultiPolygon=new OGRMultiPolygon();
-			int num=poMultiPolygon.getNumGeometries();
-			for(int i=0;i<num;i++)
-			{
-				OGRPolygon* poPolygon=(OGRLineString*)poMultiPOlygon.getGeometryRef(i).clone();
-				//转换Polygon
-			}
+		    OGRPolygon *poPolygon = (OGRPolygon*)poMultiPolygon->getGeometryRef(i)->clone();
+		    //转换Polygon
+		    OGRLinearRing *exRing = poPolygon->getExteriorRing();
+		    OGRPolygon *newPolygon = new OGRPolygon();
+		    pt->ProjectLine(exRing);
+		    newPolygon->addRing(exRing);
+		    //处理内环
+		    int iRing = poPolygon->getNumInteriorRings();
+		    for (int j = 0; j < iRing; j++)
+		    {
+			OGRLinearRing *inRing = poPolygon->getInteriorRing(j);
+			pt->ProjectLine(inRing);
+			newPolygon->addRing(inRing);
+		    }
+			newMultiPolygon->addGeometryDirectly(newPolygon);
 		}
+		newFeature->SetGeometryDirectly(newMultiPolygon);
+	    }
 	    else
 	    {
 		cout << "暂不支持的几何格式！" << endl;

@@ -19,8 +19,8 @@ PointTransformer *PointTransformer::CreateTransformer(char *FromWKT, char *ToWKT
     OGRCoordinateTransformation *projTransformer = OGRCreateCoordinateTransformation(fromProj, toProj);
     if (projTransformer == NULL)
     {
-	cout << "创建投影转换失败" << endl;
-	return NULL;
+        cout << "创建投影转换失败" << endl;
+        return NULL;
     }
     pt->projTransformer = projTransformer;
     return pt;
@@ -30,44 +30,34 @@ PointTransformer *PointTransformer::CreateTransformer(OGRSpatialReference *From,
     OGRCoordinateTransformation *projTransformer = OGRCreateCoordinateTransformation(From, To);
     if (projTransformer == NULL)
     {
-	cout << "创建投影转换失败" << endl;
-	return NULL;
+        cout << "创建投影转换失败" << endl;
+        return NULL;
     }
     PointTransformer *pt = new PointTransformer();
     pt->projTransformer = projTransformer;
     return pt;
 }
 
-PointTransformer *PointTransformer::CreateTransformer(OGRSpatialReference *From, OGRSpatialReference *To, OGRSpatialReference *GCPFrom, OGRSpatialReference *GCPTo, _Matrix *m)
+PointTransformer *PointTransformer::CreateTransformer(OGRSpatialReference *From, OGRSpatialReference *To, OGRSpatialReference *GCPFrom,string sourceFile, string desFile)
 {
     PointTransformer *pt = new PointTransformer();
-    pt->M = m;
     if (!From->IsSame(GCPFrom))
     {
-	pt->fromTransformer = OGRCreateCoordinateTransformation(From, GCPFrom);
-	if (pt->fromTransformer == nullptr)
-	{
-	    cout << "错误！数据源投影与控制点源投影无法转换！" << endl;
-	    return nullptr;
-	}
+        pt->fromTransformer = OGRCreateCoordinateTransformation(GCPFrom, From);
+        if (pt->fromTransformer == nullptr)
+        {
+            cout << "错误！数据源投影与控制点源投影无法转换！" << endl;
+            return nullptr;
+        }
     }
-    if (!To->IsSame(GCPTo))
-    {
-	pt->toTransformer = OGRCreateCoordinateTransformation(To, GCPTo);
-	if (pt->toTransformer == nullptr)
-	{
-	    cout << "错误！数据目标投影与控制点目标投影无法转换！" << endl;
-	    return nullptr;
-	}
-    }
+    pt->GetTransMatrix(sourceFile,desFile);
     return pt;
 }
 
-_Matrix *PointTransformer::GetTransMatrix(string sourceFile, string desFile)
+void PointTransformer::GetTransMatrix(string sourceFile, string desFile)
 {
     fstream filex1;
     filex1.open(sourceFile, ios::in);
-    //filex1.open("D:\\My University\\研究生三年\\研究生项目\\国防科技大学投影变换项目\\Data\\桃源80.txt", ios::in);
     int count = 0;
     filex1 >> count;
     //cout << count << endl;
@@ -77,8 +67,8 @@ _Matrix *PointTransformer::GetTransMatrix(string sourceFile, string desFile)
     double *y2000 = new double[count];
     for (int i = 0; i < count; i++)
     {
-	    string id, alt;
-	    filex1 >> id >> x80[i] >> y80[i] >> alt;
+        string id, alt;
+        filex1 >> id >> x80[i] >> y80[i] >> alt;
     }
     filex1.close();
     //cout << "2000坐标开始读取" << endl;
@@ -86,10 +76,17 @@ _Matrix *PointTransformer::GetTransMatrix(string sourceFile, string desFile)
     filex1 >> count;
     for (int i = 0; i < count; i++)
     {
-	    string id, alt;
-	    filex1 >> id >> x2000[i] >> y2000[i] >> alt;
+        string id, alt;
+        filex1 >> id >> x2000[i] >> y2000[i] >> alt;
     }
     filex1.close();
+    //转换控制点到源数据上
+    if (fromTransformer != NULL)
+    {
+        fromTransformer->Transform(count, x80, y80);
+        fromTransformer->Transform(count, x2000, y2000);
+    }
+    count=6;
     //这里开始计算参数
     _Matrix *B = new _Matrix(count * 2, 4);
     _Matrix *L = new _Matrix(2 * count, 1);
@@ -97,19 +94,19 @@ _Matrix *PointTransformer::GetTransMatrix(string sourceFile, string desFile)
     L->init_matrix();
     for (int i = 0; i < count; i++)
     {
-	B->write(2 * i, 0, 1);
-	B->write(2 * i, 1, 0);
-	B->write(2 * i, 2, x80[i]);
-	B->write(2 * i, 3, -y80[i]);
-	B->write(2 * i + 1, 0, 0);
-	B->write(2 * i + 1, 1, 1);
-	B->write(2 * i + 1, 2, y80[i]);
-	B->write(2 * i + 1, 3, x80[i]);
-	L->write(2 * i, 0, x2000[i]);
-	L->write(2 * i + 1, 0, y2000[i]);
+        B->write(2 * i, 0, 1);
+        B->write(2 * i, 1, 0);
+        B->write(2 * i, 2, x80[i]);
+        B->write(2 * i, 3, -y80[i]);
+        B->write(2 * i + 1, 0, 0);
+        B->write(2 * i + 1, 1, 1);
+        B->write(2 * i + 1, 2, y80[i]);
+        B->write(2 * i + 1, 3, x80[i]);
+        L->write(2 * i, 0, x2000[i]);
+        L->write(2 * i + 1, 0, y2000[i]);
     }
     //cout << "Show B" << endl;
-    //B->Print_Matrix();    
+    //B->Print_Matrix();
     //cout << "End B" << endl;
     //L->Print_Matrix();
     _Matrix *temp = new _Matrix(4, 2 * count);
@@ -134,7 +131,9 @@ _Matrix *PointTransformer::GetTransMatrix(string sourceFile, string desFile)
     temp4->free_matrix();
     M->Print_Matrix();
     cout << "转换矩阵计算完毕" << endl;
-    return M;
+    this->M=M;
+    //For Test
+    GCPTransformer(&x80[6],&y80[6],3);   
 }
 
 PointTransformer::~PointTransformer()
@@ -144,19 +143,10 @@ PointTransformer::~PointTransformer()
 int PointTransformer::Project(double *x, double *y, int count)
 {
     if (this->M == nullptr)
-	projTransformer->Transform(count, x, y);
+        projTransformer->Transform(count, x, y);
     else
     {
-	//控制点模式
-	if (fromTransformer != nullptr)
-	{
-	    fromTransformer->Transform(count, x, y);
-	}
-	GCPTransformer(x, y, count); //根据控制点转换
-	if (toTransformer != nullptr)
-	{
-	    toTransformer->Transform(count, x, y);
-	}
+        GCPTransformer(x, y, count); //根据控制点转换
     }
     return 0;
 }
@@ -166,21 +156,21 @@ void PointTransformer::ProjectLine(OGRLineString *line)
     vector<double> x(count), y(count);
     line->getPoints(&x[0], sizeof(double), &y[0], sizeof(double));
     if (this->M == nullptr)
-		projTransformer->Transform(count, &x[0], &y[0]);
+        projTransformer->Transform(count, &x[0], &y[0]);
     else
     {
-	//控制点模式
-		if (fromTransformer != nullptr)
-		{
-			fromTransformer->Transform(count, &x[0], &y[0]);
-		}
-		GCPTransformer(&x[0], &y[0], count); //根据控制点转换
-		if (toTransformer != nullptr)
-		{
-			toTransformer->Transform(count, &x[0], &y[0]);
-		}
+        //控制点模式
+        if (fromTransformer != nullptr)
+        {
+            fromTransformer->Transform(count, &x[0], &y[0]);
+        }
+        GCPTransformer(&x[0], &y[0], count); //根据控制点转换
+        if (toTransformer != nullptr)
+        {
+            toTransformer->Transform(count, &x[0], &y[0]);
+        }
     }
-    line->setPoints(count,&x[0],&y[0]);
+    line->setPoints(count, &x[0], &y[0]);
 }
 // 用控制点来转换参数
 int PointTransformer::GCPTransformer(double *x, double *y, int count)
@@ -190,22 +180,22 @@ int PointTransformer::GCPTransformer(double *x, double *y, int count)
     double sina = M->read(0, 3) / m;
     for (int i = 0; i < count; i++)
     {
-	_Matrix *xyM80 = new _Matrix(2, 4);
-	xyM80->init_matrix();
-	xyM80->write(0, 0, 1);
-	xyM80->write(0, 1, 0);
-	xyM80->write(0, 2, x[i]);
-	xyM80->write(0, 3, -y[i]);
-	xyM80->write(1, 0, 0);
-	xyM80->write(1, 1, 1);
-	xyM80->write(1, 2, y[i]);
-	xyM80->write(1, 3, x[i]);
-	_Matrix *xy2000 = new _Matrix(2, 1);
-	xy2000->init_matrix();
-	_Matrix_Calc m_c;
-	m_c.multiply(xyM80, M, xy2000);
-	x[i] = xy2000->read(0, 0);
-	y[i] = xy2000->read(1, 0);
+        _Matrix *xyM80 = new _Matrix(2, 4);
+        xyM80->init_matrix();
+        xyM80->write(0, 0, 1);
+        xyM80->write(0, 1, 0);
+        xyM80->write(0, 2, x[i]);
+        xyM80->write(0, 3, -y[i]);
+        xyM80->write(1, 0, 0);
+        xyM80->write(1, 1, 1);
+        xyM80->write(1, 2, y[i]);
+        xyM80->write(1, 3, x[i]);
+        _Matrix *xy2000 = new _Matrix(2, 1);
+        xy2000->init_matrix();
+        _Matrix_Calc m_c;
+        m_c.multiply(xyM80, M, xy2000);
+        x[i] = xy2000->read(0, 0);
+        y[i] = xy2000->read(1, 0);
     }
     return 0;
 }

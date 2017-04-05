@@ -8,12 +8,12 @@
 #include "PointTransformer.h"
 int main(int argc, char *argv[])
 {
-    //ForTest
+    //For Test
 	//-v /home/magicsong/Documents/TestData/Test.mdb Xian80 110.25 /home/magicsong/Documents/TestData/OutputMDB.shp CGCS2000 110.25 /home/magicsong/Documents/TestData/80points.txt 110.25 /home/magicsong/Documents/TestData/2000points.txt 110.25
 	if (argc <= 1)
     {
-	cout << "输入参数不足！程序退出" << endl;
-	return 0;
+		cout << "输入参数不足！程序退出" << endl;
+		return 0;
     }
     if (strcmp("-v", argv[1]) == 0)
     {
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	OGRSpatialReference *sourceProj = cb->BulidGaussProjection(stod(argv[4]), argv[3]);
 	OGRSpatialReference *desProj = cb->BulidGaussProjection(stod(argv[7]), argv[6]);
 	if (sourceProj->IsSameGeogCS(desProj))
-	    vdt->ReProject(argv[2], argv[5], sourceProj, desProj);
+	    vdt->Transform(argv[5],desProj);
 	else
 	{
 	    if (argc < 11)
@@ -32,9 +32,7 @@ int main(int argc, char *argv[])
 		return 0;
 	    }
 	    OGRSpatialReference *GCPFrom = cb->BulidGaussProjection(stod(argv[9]), argv[3]);
-	    OGRSpatialReference *GCPTo = cb->BulidGaussProjection(stod(argv[11]), argv[6]);
-	    _Matrix *m = PointTransformer::GetTransMatrix(argv[8], argv[10]);
-	    vdt->Transform(argv[5], desProj, GCPFrom, GCPTo, m);
+	    vdt->Transform(argv[5], desProj, GCPFrom,argv[8], argv[10]);
 	}
     }
     else if (strcmp("-r", argv[1]) == 0)
@@ -53,9 +51,7 @@ int main(int argc, char *argv[])
 		return 0;
 	    }
 	    OGRSpatialReference *GCPFrom = cb->BulidGaussProjection(stod(argv[9]), argv[3]);
-	    OGRSpatialReference *GCPTo = cb->BulidGaussProjection(stod(argv[11]), argv[6]);
-	    _Matrix *m = PointTransformer::GetTransMatrix(argv[8], argv[10]);
-	    rdt->Transform(argv[5], desProj, GCPFrom, GCPTo, m);
+	    rdt->Transform(argv[5], desProj, GCPFrom, argv[8], argv[10]);
 	}
 	system("pause");
     }

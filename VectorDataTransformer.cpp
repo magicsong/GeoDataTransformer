@@ -25,6 +25,7 @@ void VectorDataTransformer::ReadFile(const char *filename)
 	throw("File Open Failed");
     }
 }
+//过时的函数
 void VectorDataTransformer::ReProject(string sourceFile, string desFileName, OGRSpatialReference *sourceProj, OGRSpatialReference *desProj)
 {
     //读取矢量数据
@@ -97,7 +98,7 @@ void VectorDataTransformer::ReProject(string sourceFile, string desFileName, OGR
     GDALClose(outputDS);
 }
 
-int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference *To, OGRSpatialReference *GCPFrom /*= nullptr*/, OGRSpatialReference *GCPTo /* =nullptr*/, _Matrix *M /*= nullptr*/)
+int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference *To, OGRSpatialReference *GCPFrom /*= nullptr*/, string sourceFile/*=nullptr*/, string desFile/*=nullptr*/)
 {
     //获取输出数据驱动
     string ext(CPLGetExtension(outputFile.c_str()));
@@ -106,14 +107,18 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference *To,
     OGRDataSource *outputDS = poDriver->CreateDataSource(outputFile.c_str(), NULL);
     if (outputDS == NULL)
     {
-	printf("Open or create file failed.\n");
-	exit(1);
+		printf("Open or create file failed.\n");
+		exit(1);
     }
-    PointTransformer *pt = PointTransformer::CreateTransformer(InputProj, To, GCPFrom, GCPTo, M);
+    PointTransformer *pt;
+    if (GCPFrom == NULL)
+		pt = PointTransformer::CreateTransformer(InputProj, To);
+    else
+		pt = PointTransformer::CreateTransformer(InputProj, To, GCPFrom,sourceFile,desFile);
     if (pt == NULL)
     {
-	cout << "创建控制点转换器失败" << endl;
-	exit(1);
+		cout << "创建控制点转换器失败" << endl;
+		exit(1);
     }
     int laycount = InputFile->GetLayerCount(); //多个图层对应的数据
     for (int i = 0; i < laycount; i++)
@@ -185,7 +190,7 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference *To,
 		int num = poMultiPolygon->getNumGeometries();
 		for (int i = 0; i < num; i++)
 		{
-		    OGRPolygon *poPolygon = (OGRPolygon*)poMultiPolygon->getGeometryRef(i)->clone();
+		    OGRPolygon *poPolygon = (OGRPolygon *)poMultiPolygon->getGeometryRef(i)->clone();
 		    //转换Polygon
 		    OGRLinearRing *exRing = poPolygon->getExteriorRing();
 		    OGRPolygon *newPolygon = new OGRPolygon();
@@ -199,7 +204,7 @@ int VectorDataTransformer::Transform(string outputFile, OGRSpatialReference *To,
 			pt->ProjectLine(inRing);
 			newPolygon->addRing(inRing);
 		    }
-			newMultiPolygon->addGeometryDirectly(newPolygon);
+		    newMultiPolygon->addGeometryDirectly(newPolygon);
 		}
 		newFeature->SetGeometryDirectly(newMultiPolygon);
 	    }

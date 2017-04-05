@@ -24,7 +24,7 @@ void RasterDataTransformer::ReadFile(const char* filename)
 		throw("File Open Failed");
 	}
 }
-int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char* pszFormat, const char* outputFileName, GDALResampleAlg resample, OGRSpatialReference * From, OGRSpatialReference* To, OGRSpatialReference * GCPFrom, OGRSpatialReference * GCPTo, _Matrix * M)
+int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char* pszFormat, const char* outputFileName, GDALResampleAlg resample, OGRSpatialReference * From, OGRSpatialReference* To, OGRSpatialReference * GCPFrom, string sourceFile, string desFile)
 {
 	double adfDstGeoTransform[6];
 	double dbX[4];
@@ -48,7 +48,7 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	dbX[3] = adfDstGeoTransform[0];
 	dbY[3] = adfDstGeoTransform[3] + nYsize*adfDstGeoTransform[5];
 
-	PointTransformer* gcppt = PointTransformer::CreateTransformer(From, To, GCPFrom, GCPTo, M);
+	PointTransformer* gcppt = PointTransformer::CreateTransformer(From, To, GCPFrom,sourceFile,desFile);
 	UsefulKit* uk = new UsefulKit();
 	//cout << "X........." << endl;
 	//uk->PrintArray(dbX, 4);
@@ -118,7 +118,7 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	// 写入投影
 	psWarpOptions->hDstDS = hDstDS;
 	char* proj;
-	GCPTo->exportToWkt(&proj);
+	To->exportToWkt(&proj);
 	hDstDS->SetProjection(proj);
 	GDALSetGeoTransform(hDstDS, adfDstGeoTransform);
 	// 复制颜色表，如果有的话    
@@ -138,7 +138,7 @@ int RasterDataTransformer::TransformEllipsod(GDALDataset * sourceDs, const char*
 	GDALClose(sourceDs);
 	return 0;
 }
-int RasterDataTransformer::Transform(string outputFile, OGRSpatialReference * To, OGRSpatialReference * GCPFrom /*= nullptr*/, OGRSpatialReference * GCPTo /*= nullptr*/, _Matrix * M /*= nullptr*/)
+int RasterDataTransformer::Transform(string outputFile, OGRSpatialReference * To, OGRSpatialReference * GCPFrom /*= nullptr*/, string sourceFile/*= nullptr*/, string desFile/*= nullptr*/)
 {
 	char* fromProj, *toProj;
 	InputProj->exportToProj4(&fromProj);
@@ -151,7 +151,7 @@ int RasterDataTransformer::Transform(string outputFile, OGRSpatialReference * To
 	}
 	else
 	{
-		if (M == NULL)
+		if (sourceFile=="")
 		{
 			cout << "不同的椭球体转换需要控制点！" << endl;
 			return -1;
@@ -159,7 +159,7 @@ int RasterDataTransformer::Transform(string outputFile, OGRSpatialReference * To
 		
 		string ext(CPLGetExtension(outputFile.c_str()));
 		transform(ext.begin(), ext.end(), ext.begin(), ::toupper);
-		TransformEllipsod(InputFile, formatMap[ext].c_str(), outputFile.c_str(), GRA_Bilinear,InputProj, To, GCPFrom, GCPTo, M);
+		TransformEllipsod(InputFile, formatMap[ext].c_str(), outputFile.c_str(), GRA_Bilinear,InputProj, To, GCPFrom, sourceFile,desFile);
 	}
 	return 0;
 }

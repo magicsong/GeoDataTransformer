@@ -7,7 +7,7 @@ public:
 	virtual ~DataTransformerBase();
 	virtual void ReadFile(const char* filename)=0;
 private:
-	virtual int Transform(string outputFile,OGRSpatialReference* To, OGRSpatialReference * GCPFrom = nullptr, OGRSpatialReference * GCPTo = nullptr, _Matrix* M = nullptr) = 0;
+	virtual int Transform(string outputFile,OGRSpatialReference* To, OGRSpatialReference * GCPFrom = nullptr, string sourceFile=nullptr, string desFile=nullptr) = 0;
 public:
 	OGRSpatialReference* InputProj;
 protected:
